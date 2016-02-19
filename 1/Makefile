@@ -1,0 +1,13 @@
+all: shape
+
+shape: shape.o main.o
+	gcc shape.o main.o -o shape
+    
+shape.o: shape.c
+	gcc -c shape.c
+    
+main.o: main.c
+	gcc -c main.c
+    
+clean:
+	rm -rf *.o shape
