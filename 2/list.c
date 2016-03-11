@@ -51,7 +51,7 @@ Iterator list_iterator_next(Iterator li) {
 	ListElement * le = malloc(sizeof(ListElement));
 
 	le = li.li.pos;
-	
+
 	if (le != NULL) {
 		if (le->next != NULL) {
 			res.li.pos = le->next;
@@ -158,6 +158,9 @@ void * list_delete_last(List * l) {
 
 	lo->size--;
     return x;
+};
+void foreach(Container c, void (* func)(void), struct * arg) {
+	func
 };
 int list_size(List * l) {
 	ListObject * lo = LISTOBJ(l);

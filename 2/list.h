@@ -29,6 +29,7 @@ List * list_create();
 void list_insert_first(List * l, void * data);
 void list_insert_last(List * l, void * data);
 void * list_delete_last(List * l);
+void foreach(Container c, void (* func)(void), struct * arg);
 int list_size(List * l);
 // Data list_find();
 void list_destroy(List * l);
