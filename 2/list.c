@@ -9,6 +9,7 @@ ContainerMethods ListMethods = {
 	list_insert_first,
 	list_insert_last,
 	list_delete_last,
+	list_foreach,
 	list_size,
 	list_destroy,
 	list_first,
@@ -45,6 +46,15 @@ Iterator list_iterator_last(List * l) {
 	iter.li.pos = lo->tail;
 
     return iter;
+};
+int list_iterator_equals(Iterator a, Iterator b) {
+	ListElement * one = a.li.pos;
+	ListElement * two = b.li.pos;
+
+	if (one->data == two->data)
+		return 1;
+	else
+		return 0;
 };
 Iterator list_iterator_next(Iterator li) {
 	Iterator res;
@@ -159,15 +169,19 @@ void * list_delete_last(List * l) {
 	lo->size--;
     return x;
 };
-void foreach(List * l, void (* func)(void), struct * arg) {
+void list_foreach(List * l, void (* func)(void * data, void * funcarg), void * arg) {
 	Iterator first = l->m->first(l);
 	Iterator last = l->m->last(l);
 	Iterator iter = first;
 
-	fwhile (iter != last) {
+	do {
+		ListElement * le = iter.li.pos;
+		void * data = le->data;
 
-		l->m->next(&iter);
-	}
+		func(data, arg);
+
+		iter = list_iterator_next(iter); // поправить в list_iterator_next(&iter)
+	} while (list_iterator_equals(iter, last));
 };
 int list_size(List * l) {
 	ListObject * lo = LISTOBJ(l);

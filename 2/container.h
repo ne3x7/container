@@ -22,7 +22,7 @@ typedef struct ContainerMethods {
 	void (* insert_first)(Container c, void * data);
 	void (* insert_last)(Container c, void * data);
 	void * (* delete_last)(Container c);
-	void (* foreach)(Container c, void (* func)(struct * funcarg), struct * arg);
+	void (* foreach)(Container c, void (* func)(void * data, void * funcarg), void * arg);
 	int (* size)(Container c);
 	void (* destroy)(Container c);
 	Iterator (* first)(Container c); // returns Iterator

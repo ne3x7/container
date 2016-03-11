@@ -2,6 +2,10 @@
 #include "../list.h"
 #include "gtest/gtest.h"
 
+void nullify(void * data, char * nullifier) {
+	data = nullifier;
+};
+
 TEST(ListTest, Create) {
 	List * l = list_create();
 	EXPECT_TRUE(l);
@@ -99,4 +103,39 @@ TEST(ListTest, Destroy) {
 	l->m->insert_last(l, (void *)"two");
 
 	l->m->destroy(l);
+}
+
+
+TEST(ListTest, IteratorEquals) {
+	List * l = list_create();
+	l->m->insert_last(l, (void *)"one");
+	l->m->insert_last(l, (void *)"two");
+
+	Iterator first = l->m->first(l);
+	Iterator last = l->m->last(l);
+
+	EXPECT_TRUE(list_iterator_equals(first, first));
+	EXPECT_FALSE(list_iterator_equals(first, last));
+
+	l->m->destroy(l);
+}
+
+TEST(ListTest, ForEach) {
+	List * l = list_create();
+	l->m->insert_last(l, (void *)"one");
+	l->m->insert_last(l, (void *)"two");
+	l->m->insert_last(l, (void *)"three");
+
+	Iterator first = l->m->first(l);
+	Iterator second = list_iterator_next(first);
+	Iterator last = l->m->last(l);
+
+	l->m->foreach(l, nullify, "");
+
+	void * data1 = ((ListElement *)first.li.pos) -> data;
+	void * data2 = ((ListElement *)second.li.pos) -> data;
+	void * data3 = ((ListElement *)last.li.pos) -> data;
+	EXPECT_FALSE(strcmp("", data1));
+	EXPECT_FALSE(strcmp("", data2));
+	EXPECT_FALSE(strcmp("", data3));
 }
