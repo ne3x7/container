@@ -159,8 +159,15 @@ void * list_delete_last(List * l) {
 	lo->size--;
     return x;
 };
-void foreach(Container c, void (* func)(void), struct * arg) {
-	func
+void foreach(List * l, void (* func)(void), struct * arg) {
+	Iterator first = l->m->first(l);
+	Iterator last = l->m->last(l);
+	Iterator iter = first;
+
+	fwhile (iter != last) {
+
+		l->m->next(&iter);
+	}
 };
 int list_size(List * l) {
 	ListObject * lo = LISTOBJ(l);
