@@ -19,7 +19,7 @@ Iterator * map_iterator_backward(Map * m, Iterator iter);
 
 // <<------------------------------------------------ Map methods ------------------------------------------------->>
 
-Map * map_create(int size);
+Map * map_create(int (* hash)(void * key), int size);
 void map_add(Map * m, void * key, void * value);
 void * map_remove(Map * m, void * key);
 void foreach(Map * m, void (* func)(void * data, void * funcarg), void * arg);

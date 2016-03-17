@@ -19,7 +19,7 @@ typedef union Iterator {
 typedef void * Hash;
 
 typedef struct HashMethods {
-	Hash (* create)(int size);
+	Hash (* create)(int (* hash)(void * key), int size);
 	void (* add)(Hash hash, void * key, void * value);
 	void * (* remove)(Hash hash, void * key);
 	void (* foreach)(Hash hash, void (* func)(void * data, void * funcarg), void * arg);
