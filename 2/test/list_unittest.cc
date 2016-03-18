@@ -119,7 +119,7 @@ TEST(ListTest, IteratorEquals) {
 
 	l->m->destroy(l);
 }
-
+/*
 TEST(ListTest, ForEach) {
 	List * l = list_create();
 	l->m->insert_last(l, (void *)"one");
@@ -139,3 +139,4 @@ TEST(ListTest, ForEach) {
 	EXPECT_FALSE(strcmp("", data2));
 	EXPECT_FALSE(strcmp("", data3));
 }
+*/

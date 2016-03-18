@@ -4,11 +4,11 @@
 // <<---------------------------------------------- Types & Structs ----------------------------------------------->>
 
 typedef struct MapIterator {
-	void * key;
+	void * pos;
 } MapIterator;
 
 typedef struct TreeIterator {
-	int pos;
+	void * pos;
 } TreeIterator;
 
 typedef union Iterator {
@@ -24,7 +24,7 @@ typedef struct HashMethods {
 	void * (* remove)(Hash hash, void * key);
 	void (* foreach)(Hash hash, void (* func)(void * data, void * funcarg), void * arg);
 	int (* size)(Hash hash);
-	void * (* at)(Hash hash, void * key);
+	void * (* get)(Hash hash, void * key);
 	void (* destroy)(Hash hash);
 } HashMethods;
 

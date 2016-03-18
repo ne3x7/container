@@ -21,11 +21,11 @@ typedef struct MapObject { // у каждого экземпляра map сво�
 	int (* hash)(void * data); // хэш-функция
 	MapArrayElement ** array; // массив указателей
 	int size;
+	int count;
 } MapObject;
 
 typedef struct MapArrayElement { // у каждого элемента массива есть хэш и цепочка
-	int hash; // нужен ли hash? посмотреть хэш-функции, идеально было бы нумеровать натуральным рядом
-	int chain_len;
+	int chain_len; // убрать
 	MapListElement * head; // можно хранить только голову и работать как со списком
 } MapArrayElement;
 
@@ -42,6 +42,7 @@ Iterator map_iterator_first(Map * m);
 Iterator map_iterator_last(Map * m);
 Iterator * map_iterator_forward(Map * m, Iterator iter);
 Iterator * map_iterator_backward(Map * m, Iterator iter);
+void * map_iterator_get(Map * m, Iterator iter);
 
 // <<------------------------------------------------ Map methods ------------------------------------------------->>
 

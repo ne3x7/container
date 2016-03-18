@@ -22,9 +22,9 @@ Iterator * map_iterator_backward(Map * m, Iterator iter);
 Map * map_create(int (* hash)(void * key), int size);
 void map_add(Map * m, void * key, void * value);
 void * map_remove(Map * m, void * key);
-void foreach(Map * m, void (* func)(void * data, void * funcarg), void * arg);
+// void foreach(Map * m, void (* func)(void * data, void * funcarg), void * arg);
 int map_size(Map * m);
-void * map_at(Map * m, void * key);
+void * map_get(Map * m, void * key);
 void map_destroy(Map * m);
 
 #ifdef __cplusplus
