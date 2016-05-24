@@ -1,31 +1,32 @@
-#ifndef container_h
-#define container_h
+#include "map.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // <<---------------------------------------------- Types & Structs ----------------------------------------------->>
 
-typedef struct MapIterator {
-	void * pos;
-} MapIterator;
+typedef struct Hash {
+	MapMethods * m;
+} Hash;
 
-typedef struct TreeIterator {
-	void * pos;
-} TreeIterator;
+// <<-------------------------------------------- MapIterator methods --------------------------------------------->>
 
-typedef union Iterator {
-	MapIterator mi;
-	TreeIterator ti;
-} Iterator;
+Iterator hash_iterator_first(Hash * h);
+Iterator hash_iterator_last(Hash * h);
+Iterator * hash_iterator_forward(Hash * h, Iterator iter);
+Iterator * hash__iterator_backward(Hash * h, Iterator iter);
 
-typedef void * Hash;
+// <<------------------------------------------------ Map methods ------------------------------------------------->>
 
-typedef struct HashMethods {
-	Hash (* create)(int (* hash)(void * key), int size);
-	void (* add)(Hash hash, void * key, void * value);
-	void * (* remove)(Hash hash, void * key);
-	void (* foreach)(Hash hash, void (* func)(void * data, void * funcarg), void * arg);
-	int (* size)(Hash hash);
-	void * (* get)(Hash hash, void * key);
-	void (* destroy)(Hash hash);
-} HashMethods;
+Hash * hash_create(int (* hash)(void * key), int size);
+void hash_add(Hash * h, void * key, void * value);
+void * hash_remove(Hash * h, void * key);
+// void hash_foreach(Hash * h, void (* func)(void * data, void * funcarg), void * arg);
+int hash_size(Hash * h);
+void * hash_get(Hash * h, void * key);
+void hash_destroy(Hash * h);
 
+#ifdef __cplusplus
+}
 #endif

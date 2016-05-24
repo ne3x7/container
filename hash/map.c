@@ -1,52 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "map.h"
+#include "hash.h"
 
-#define MAPOBJ(map) (MapObject *) ((char *)map + sizeof(Map))
+#define HASHOBJ(hash) (HashObject *) ((char *)hash + sizeof(Hash))
 
-HashMethods MapMethods = {
-	map_create,
-	map_add,
-	map_remove,
-	foreach,
-	map_size,
-	map_at,
-	map_destroy
+HashMethods HashMethods = {
+	hash_create,
+	hash_add,
+	hash_remove,
+	hash_foreach,
+	hash_size,
+	hash_at,
+	hash_destroy
 };
 
 // <<---------------------------------------------- Types & Structs ----------------------------------------------->>
 
-typedef struct MapObject { // у каждого экземпляра map свой массив
+typedef struct HashObject { // у каждого экземпляра map свой массив
 	int (* hash)(void * data); // хэш-функция
-	MapArrayElement ** array; // массив указателей
+	HashArrayElement ** array; // массив указателей
 	int size;
 	int count;
-} MapObject;
+} HashObject;
 
-typedef struct MapArrayElement { // у каждого элемента массива есть хэш и цепочка
+typedef struct HashArrayElement { // у каждого элемента массива есть хэш и цепочка
 	int chain_len; // убрать
-	MapListElement * head; // можно хранить только голову и работать как со списком
-} MapArrayElement;
+	HashListElement * head; // можно хранить только голову и работать как со списком
+} HashArrayElement;
 
-typedef struct MapListElement { // элементы цепочки имеют ключ и значение
-	MapListElement * previous;
+typedef struct HashListElement { // элементы цепочки имеют ключ и значение
+	HashListElement * previous;
 	void * key;
 	void * value;
-	MapListElement * next;
-} MapElement;
+	HashListElement * next;
+} HashElement;
 
 // <<-------------------------------------------- MapIterator methods --------------------------------------------->>
 
-Iterator map_iterator_first(Map * m);
-Iterator map_iterator_last(Map * m);
-Iterator * map_iterator_forward(Map * m, Iterator iter);
-Iterator * map_iterator_backward(Map * m, Iterator iter);
-void * map_iterator_get(Map * m, Iterator iter);
+Iterator hash_iterator_first(Map * m);
+Iterator hash_iterator_last(Map * m);
+Iterator * hash_iterator_forward(Map * m, Iterator iter);
+Iterator * hash_iterator_backward(Map * m, Iterator iter);
+void * hash_iterator_get(Map * m, Iterator iter);
 
 // <<------------------------------------------------ Map methods ------------------------------------------------->>
 
-Map * map_create(int (* hash)(void * key, void * value), int size) { // пока так
+Map * hash_create(int (* hash)(void * key, void * value), int size) { // пока так
 	Map * map = malloc(sizeof(Map) + sizeof(MapObject));
 	map->m = MapMethods;
 	MapObject * mo = MAPOBJ(map);
@@ -55,7 +55,7 @@ Map * map_create(int (* hash)(void * key, void * value), int size) { // пока
 	mo->array = malloc(size * sizeof(MapArrayElement));
 	return map;
 };
-void map_add(Map * map, void * key, void * value) { // возможно, я что-то делаю не так
+void hash_add(Map * map, void * key, void * value) {
 	MapObject * mo = MAPOBJ(map);
 	int index = mo->hash(key);
 	MapArrayElement * mae = mo->array[index];
@@ -84,7 +84,7 @@ void map_add(Map * map, void * key, void * value) { // возможно, я чт
 
 	mae->chain_len++;
 };
-void * map_remove(Map * map, void * key) {
+void * hash_remove(Map * map, void * key) {
 	MapObject * mo = MAPOBJ(map);
 	int index = mo->hash(key);
 	void * vtr;
@@ -121,11 +121,11 @@ void * map_remove(Map * map, void * key) {
 		exit(-1);
 	}
 };
-// void foreach(Map * map, void (* func)(void * data, void * funcarg), void * arg);
-int map_size(Map * map) {
+// void hash_foreach(Map * map, void (* func)(void * data, void * funcarg), void * arg);
+int hash_size(Map * map) {
 	// пройтись по всем
 };
-void * map_at(Map * map, void * key) {
+void * hash_at(Map * map, void * key) {
 	MapObject * mo = MAPOBJ(map);
 	int index = mo->hash(key);
 	MapArrayElement * mae = mo->array[index];
@@ -153,7 +153,7 @@ void * map_at(Map * map, void * key) {
 		exit(-1);
 	}
 };
-void map_destroy(Map * map) {
+void hash_destroy(Map * map) {
 	MapObject * mo = MAPOBJ(map);
 	for (i = 0; i < mo->size; i++) { // для всех цепочек
 		MapArrayElement * mae = mo->array[i];
