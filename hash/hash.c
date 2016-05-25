@@ -9,6 +9,7 @@
 MapMethods HashMethods = {
 	hash_add,
 	hash_remove,
+	hash_foreach,
 	hash_get,
 	hash_destroy
 };
@@ -159,7 +160,19 @@ void * hash_remove(Hash * h, void * key) {
 	else
 		return vtr;
 };
-// void hash_foreach(Map * map, void (* func)(void * data, void * funcarg), void * arg);
+void hash_foreach(Hash * h, void (* func)(void * data, void * funcarg), void * arg) {
+	int i = 0;
+	HashObject * ho = HASHOBJ(h);
+
+	for (i = 0; i < ho->size; i++) {
+		HashArrayElement * hae = ho->array[i];
+		HashListElement * hle = hae->head;
+		while (hle != NULL) {
+			func(hle->value, arg);
+			hle = hle->next;
+		}
+	}
+};
 void * hash_get(Hash * h, void * key) {
 	HashObject * ho = HASHOBJ(h);
 	int index = ho->hash(key);
