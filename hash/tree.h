@@ -23,7 +23,7 @@ typedef struct Tree {
 Tree * tree_create(int (* hash)(void * key));
 void tree_add(Tree * t, void * key, void * value);
 void * tree_remove(Tree * t, void * key);
-// void tree_foreach(Tree * t, void (* func)(void * data, void * funcarg), void * arg);
+void tree_foreach(Tree * t, void (* func)(void * data, void * funcarg), void * arg);
 void * tree_get(Tree * t, void * key);
 void tree_destroy(Tree * t);
 
