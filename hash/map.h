@@ -16,16 +16,16 @@ typedef union Iterator {
 	TreeIterator ti;
 } Iterator;
 
-typedef void * Map;
+typedef struct Map {
+	struct MapMethods * m;
+} Map;
 
 typedef struct MapMethods {
-	Hash (* create)(int (* hash)(void * key), int size);
-	void (* add)(Map map, void * key, void * value);
-	void * (* remove)(Map map, void * key);
-	void (* foreach)(Map map, void (* func)(void * data, void * funcarg), void * arg);
-	int (* size)(Map map);
-	void * (* get)(Map map, void * key);
-	void (* destroy)(Map map);
+	void (* add)(Map * map, void * key, void * value);
+	void * (* remove)(Map * map, void * key);
+	//void (* foreach)(Map * map, void (* func)(void * data, void * funcarg), void * arg);
+	void * (* get)(Map * map, void * key);
+	void (* destroy)(Map * map);
 } MapMethods;
 
 #endif
