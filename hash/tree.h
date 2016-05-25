@@ -26,6 +26,7 @@ void * tree_remove(Tree * t, void * key);
 void tree_foreach(Tree * t, void (* func)(void * data, void * funcarg), void * arg);
 void * tree_get(Tree * t, void * key);
 void tree_destroy(Tree * t);
+// void tree_trace(Tree * t);
 
 #ifdef __cplusplus
 }

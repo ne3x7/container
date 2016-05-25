@@ -22,7 +22,7 @@ typedef struct TreeObject {
 } TreeObject;
 
 typedef struct Node {
-	void * key;
+	int key;
 	void * value;
 	struct Node * parent;
 	struct Node * lchild;
@@ -53,21 +53,23 @@ void tree_add(Tree * t, void * key, void * value) {
 	toadd->lchild = NULL;
 	toadd->rchild = NULL;
 
-	if (root = NULL)
+	if (root == NULL)
 		to->root = toadd;
 	else
 		while(1) {
 			if (index < root->key) {
 				if (root->lchild == NULL) {
-					root->lchild = updated;
+					root->lchild = toadd;
 					return;
 				}
 				else
 					root = root->lchild;
 			}
 			else if (index > root->key) {
-				if (root->rchild == NULL)
-					root->rchild = updated;
+				if (root->rchild == NULL) {
+					root->rchild = toadd;
+					return;
+				}
 				else
 					root = root->rchild;
 			}
@@ -119,7 +121,7 @@ void * tree_remove(Tree * t, void * key) {
 					replace = replace->lchild;
 
 				int mem = replace->key;
-				root->value = tree_remove(replace, mem);
+				root->value = tree_remove(t, &mem);
 				root->key = mem;
 
 				return vtr;
@@ -169,7 +171,7 @@ void tree_foreach(Tree * t, void (* func)(void * data, void * funcarg), void * a
 	TreeObject * to = TREEOBJ(t);
 
 	if (to->root != NULL)
-		tree_apply(Node * node, void (* func)(void * data, void * funcarg), void * arg);
+		tree_apply(to->root, func, arg);
 };
 void * tree_get(Tree * t, void * key) {
 	TreeObject * to = TREEOBJ(t);
@@ -180,13 +182,13 @@ void * tree_get(Tree * t, void * key) {
 		return NULL;
 	else
 		while(1) {
-			if (key < root->key) {
+			if (index < root->key) {
 	            if (root->lchild == NULL)
 	                return NULL;
 
             	root = root->lchild;
 	        }
-	        else if (key > root->key) {
+	        else if (index > root->key) {
 	            if (root->rchild == NULL)
 	                return NULL;
 
@@ -199,11 +201,11 @@ void * tree_get(Tree * t, void * key) {
 void tree_destroyer(Node * node) {
 	if (node->lchild != NULL)
 		tree_destroyer(node->lchild);
-	free(node->lchild);
+	node->lchild = NULL;
 
 	if (node->rchild != NULL)
 		tree_destroyer(node->rchild);
-	free(node->rchild);
+	node->rchild = NULL;
 
 	free(node);
 };
@@ -213,3 +215,22 @@ void tree_destroy(Tree * t) {
 		tree_destroyer(to->root);
 	free(t);
 };
+/*
+void tree_levels(Node * n, int depth) {
+	int i;
+    for (i = 0; i < depth; i++) {
+        printf("-");
+    }
+    if (n == NULL) {
+        return;
+    }
+    printf("(%d, %s)\n", n->key, n->value);
+    if (n->lchild != NULL) tree_levels(n->lchild, depth+1);
+    if (n->rchild != NULL) tree_levels(n->rchild, depth+1);
+};
+void tree_trace(Tree * t) {
+	TreeObject * to = TREEOBJ(t);
+	if (to->root != NULL)
+		tree_levels(to->root, 0);
+};
+*/
