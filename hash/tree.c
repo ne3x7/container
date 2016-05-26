@@ -31,6 +31,17 @@ typedef struct Node {
 
 // <<-------------------------------------------- TreeIterator methods -------------------------------------------->>
 
+Iterator tree_iterator_root(Tree * t) {
+	TreeObject * to = TREEOBJ(t);
+	TreeIterator ti;
+	Iterator iter;
+
+	ti.pos = to->root;
+	iter.ti = ti;
+
+	return iter;
+};
+
 // <<------------------------------------------------ Tree methods ------------------------------------------------>>
 
 Tree * tree_create(int (* hash)(void * key)) {
@@ -159,15 +170,15 @@ void * tree_remove(Tree * t, void * key) {
 
 	return vtr;
 };
-void tree_apply(Node * node, void (* func)(void * data, void * funcarg), void * arg) {
-	func(node->value, arg);
+void tree_apply(Node * node, void (* func)(void ** data, void * funcarg), void * arg) {
+	func(&(node->value), arg);
 
 	if (node->lchild != NULL)
 		tree_apply(node->lchild, func, arg);
 	if (node->rchild != NULL)
 		tree_apply(node->rchild, func, arg);
 };
-void tree_foreach(Tree * t, void (* func)(void * data, void * funcarg), void * arg) {
+void tree_foreach(Tree * t, void (* func)(void ** data, void * funcarg), void * arg) {
 	TreeObject * to = TREEOBJ(t);
 
 	if (to->root != NULL)

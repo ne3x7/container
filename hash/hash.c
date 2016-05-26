@@ -133,19 +133,26 @@ void * hash_remove(Hash * h, void * key) {
 
 		do {
 			if (head->key == key) {
-				if (prev != NULL) {
-					prev->next = head->next;
-					head->next->previous = prev;
+				if (head->next != NULL) {
+					if (prev != NULL) {
+						prev->next = head->next;
+						head->next->previous = prev;
+					}
+					else {
+						head->next->previous = NULL;
+						hae->head = head->next;
+					}
+
+					vtr = head->value;
+					HashListElement * tmp = head->next;
+					free(head);
+					head = tmp;
 				}
 				else {
-					head->next->previous = NULL;
-					hae->head = head->next;
+					vtr = head->value;
+					free(head);
+					hae->head = NULL;
 				}
-
-				vtr = head->value;
-				HashListElement * tmp = head->next;
-				free(head);
-				head = tmp;
 
 				break;
 			}
@@ -160,7 +167,7 @@ void * hash_remove(Hash * h, void * key) {
 	else
 		return vtr;
 };
-void hash_foreach(Hash * h, void (* func)(void * data, void * funcarg), void * arg) {
+void hash_foreach(Hash * h, void (* func)(void ** data, void * funcarg), void * arg) {
 	int i = 0;
 	HashObject * ho = HASHOBJ(h);
 
@@ -168,7 +175,7 @@ void hash_foreach(Hash * h, void (* func)(void * data, void * funcarg), void * a
 		HashArrayElement * hae = ho->array[i];
 		HashListElement * hle = hae->head;
 		while (hle != NULL) {
-			func(hle->value, arg);
+			func(&(hle->value), arg);
 			hle = hle->next;
 		}
 	}

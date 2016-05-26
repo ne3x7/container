@@ -23,7 +23,7 @@ typedef struct Map {
 typedef struct MapMethods {
 	void (* add)(Map * map, void * key, void * value);
 	void * (* remove)(Map * map, void * key);
-	void (* foreach)(Map * map, void (* func)(void * data, void * funcarg), void * arg);
+	void (* foreach)(Map * map, void (* func)(void ** data, void * funcarg), void * arg);
 	void * (* get)(Map * map, void * key);
 	void (* destroy)(Map * map);
 } MapMethods;

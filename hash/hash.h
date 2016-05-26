@@ -23,7 +23,7 @@ void * hash_iterator_get(Hash * h, Iterator iter);
 Hash * hash_create(int (* hash)(void * key), int size);
 void hash_add(Hash * h, void * key, void * value);
 void * hash_remove(Hash * h, void * key);
-void hash_foreach(Hash * h, void (* func)(void * data, void * funcarg), void * arg);
+void hash_foreach(Hash * h, void (* func)(void ** data, void * funcarg), void * arg);
 void * hash_get(Hash * h, void * key);
 void hash_destroy(Hash * h);
 
